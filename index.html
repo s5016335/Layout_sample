@@ -28,10 +28,12 @@
     <ul id="nav">
       <li><a href="#a1">a1</a></li>
       <li><a href="#a2">a2</a></li>
-      <li></li>
-      <li></li>
-      <li></li>
     </ul>
+    <input id="Name" type="text" />
+    <input id="Conversation" type="text" />
+    <input id="Date" type="text" />
+    <Button id="btn">發送</Button>
+
     <div id="content" class="content"></div>
     <section id="a1">
       <div class="s1"><p>1</p></div>
@@ -89,17 +91,37 @@
     </table>
   </body>
   <script>
+    console.log('you are clicked me !!!!!!');
+
+    $('#btn').on('click', function() {
+      let name = $('#Name').val();
+      let conversation = $('#Conversation').val();
+      let date = $('#Date').val();
+      fetch('http://localhost:3000/content', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: name,
+          conversation: conversation,
+          date: date
+        })
+      });
+    });
+
     let output = ``;
     fetch('http://localhost:3000/content')
       .then(res => res.json())
       .then(data => {
         for (let i = 0; i < data.length; i++) {
           output += `<div  class="box"><p>姓名： ${data[i].Name}</p></div>`;
-          console.log(data[i]);
         }
+        document.getElementById('content').innerHTML = output;
+      })
+      .catch(err => {
+        output += `<p>無資料</p>`;
         document.getElementById('content').innerHTML = output;
       });
   </script>
 </html>
-
-
